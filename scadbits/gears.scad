@@ -1,18 +1,12 @@
 /**
- * Return gear minor radius.
+ * Return gear root radius.
  */
-function sbGearMinorRadius(circularPitch, numberOfTeeth) = circularPitch * numberOfTeeth / PI / 2;
-
-/**
- * Return gear addendum.
- */
-function sbGearAddendum(circularPitch) = circularPitch / PI;
-
+function sbGearRootRadius(circularPitch, numberOfTeeth) = circularPitch * numberOfTeeth / PI / 2;
 /**
  * Return gear major radius.
  */
-function sbGearMajorRadius(circularPitch, numberOfTeeth, clearance=0) =
-        sbGearMinorRadius(circularPitch, numberOfTeeth) + sbGearAddendum(circularPitch) - clearance;
+function sbGearOutsideRadius(circularPitch, numberOfTeeth, clearance=0) =
+        sbGearRootRadius(circularPitch, numberOfTeeth) + circularPitch / PI - clearance;
 
 /**
  * Really fast involute gear with cheap axle hole.
@@ -24,8 +18,8 @@ module sbGear(circularPitch=3, numberOfTeeth=12, holeRadius=undef, deleteTeeth=0
             let(theta = (1 - delta) * max(baseRadius, radius) + delta * majorRadius)
             _sbPolar(theta, edgeSign * (_sbInvolute(baseRadius, theta) + toothThickness));
     
-    minorRadius = sbGearMinorRadius(circularPitch, numberOfTeeth);
-    majorRadius = sbGearMajorRadius(circularPitch, numberOfTeeth);
+    minorRadius = sbGearRootRadius(circularPitch, numberOfTeeth);
+    majorRadius = sbGearOutsideRadius(circularPitch, numberOfTeeth);
     baseRadius = minorRadius * cos(pressureAngle);
     radius = minorRadius - (majorRadius - minorRadius) - clearance;
     toothThickness = (circularPitch - backlash) / 2;
@@ -64,7 +58,7 @@ module sbGear(circularPitch=3, numberOfTeeth=12, holeRadius=undef, deleteTeeth=0
  * Fast rack.
  */
 module sbRack(linearPitch=3, numberOfTeeth=6, width=2, pressureAngle=28, backlash=0) {
-    addendum = sbGearAddendum(linearPitch);
+    addendum = linearPitch / PI;
     toothThickness = addendum * tan(pressureAngle);
     tooth = [
         [-linearPitch * 3 / 4, -addendum - width],
@@ -89,8 +83,8 @@ module sbRack(linearPitch=3, numberOfTeeth=6, width=2, pressureAngle=28, backlas
  */
 module sbGearDesigner(pitch=3, holeRadius=undef, redToothCount=8, greenToothCount=16, rackToothCount=12, rackWidth=2) {
     
-    r1 = sbGearMinorRadius(pitch, redToothCount);
-    r2 = sbGearMinorRadius(pitch, redToothCount) + sbGearMinorRadius(pitch, greenToothCount);
+    r1 = sbGearRootRadius(pitch, redToothCount);
+    r2 = sbGearRootRadius(pitch, redToothCount) + sbGearRootRadius(pitch, greenToothCount);
 
     rotate([0,0, $t * 360 / redToothCount]) {
         color("Pink") sbGear(pitch, redToothCount, holeRadius);
@@ -104,3 +98,5 @@ module sbGearDesigner(pitch=3, holeRadius=undef, redToothCount=8, greenToothCoun
         color("SlateGray") sbRack(pitch, rackToothCount, rackWidth);
     }
 }
+
+sbGearDesigner();
