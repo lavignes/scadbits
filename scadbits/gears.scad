@@ -64,8 +64,8 @@ module sbGear(circularPitch=3, numberOfTeeth=12, holeRadius=undef, deleteTeeth=0
  * Fast rack.
  */
 module sbRack(linearPitch=3, numberOfTeeth=6, width=2, pressureAngle=28, backlash=0) {
-	addendum = sbGearAddendum(linearPitch);
-	toothThickness = addendum * tan(pressureAngle);
+    addendum = sbGearAddendum(linearPitch);
+    toothThickness = addendum * tan(pressureAngle);
     tooth = [
         [-linearPitch * 3 / 4, -addendum - width],
         [-linearPitch * 3 / 4 - backlash, -addendum],
@@ -104,3 +104,5 @@ module sbGearDesigner(pitch=3, holeRadius=undef, redToothCount=8, greenToothCoun
         color("SlateGray") sbRack(pitch, rackToothCount, rackWidth);
     }
 }
+
+sbGearDesigner(holeRadius=1, redToothCount=8+10*$t, greenToothCount=16-10*$t);
