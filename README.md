@@ -1,0 +1,1 @@
+![SCADBits Animation](scadbits.gif)
