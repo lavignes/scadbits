@@ -57,7 +57,7 @@ module sbGear(circularPitch=3, numberOfTeeth=12, holeRadius=undef, deleteTeeth=0
 /**
  * Fast rack.
  */
-module sbRack(linearPitch=3, numberOfTeeth=6, width=2, pressureAngle=28, backlash=0) {
+module sbRack(linearPitch=3, numberOfTeeth=12, width=2, pressureAngle=28, backlash=0) {
     addendum = linearPitch / PI;
     toothThickness = addendum * tan(pressureAngle);
     tooth = [
