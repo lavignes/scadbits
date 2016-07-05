@@ -104,5 +104,3 @@ module sbGearDesigner(pitch=3, holeRadius=undef, redToothCount=8, greenToothCoun
         color("SlateGray") sbRack(pitch, rackToothCount, rackWidth);
     }
 }
-
-sbGearDesigner(holeRadius=1, redToothCount=8+10*$t, greenToothCount=16-10*$t);
